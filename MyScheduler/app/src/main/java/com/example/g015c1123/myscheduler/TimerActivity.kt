@@ -40,7 +40,7 @@ class TimerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_timer)
         var taskmin=intent?.getLongExtra("TASK_TIME",1)
         //テスト用変数
-        var min:Long=1*1000L*60L
+        //var min:Long=1*1000L*60L
         if (taskmin!! <10) {
             timerText.text="0${taskmin}:00"
         }else{

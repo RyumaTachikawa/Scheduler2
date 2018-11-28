@@ -4,23 +4,24 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import kotlinx.android.synthetic.main.activity_schedule_edit.*
+import kotlinx.android.synthetic.main.activity_schedule_edit.view.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.yesButton
+import java.text.DateFormat
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
-import android.app.DatePickerDialog
-import android.support.v4.app.FragmentActivity
-import android.widget.DatePicker
 
-
-class ScheduleEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
+class ScheduleEditActivity : AppCompatActivity()
+    ,DatePickerFragment.OnDateSelectedListener
+    ,TimePickerFragment.OnTimeSelectedListener{
     private lateinit var realm: Realm
 
     @SuppressLint("RestrictedApi")
@@ -100,6 +101,16 @@ class ScheduleEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
              startActivity(intent)
              finish()
         }
+
+        dateEdit.setOnClickListener {
+            val dialog = DatePickerFragment()
+            dialog.show(supportFragmentManager,"date_dialog")
+        }
+
+        timeEdit.setOnClickListener {
+            val dialog = TimePickerFragment()
+            dialog.show(supportFragmentManager,"time_dialog")
+        }
     }
 
     override fun onDestroy() {
@@ -123,18 +134,13 @@ class ScheduleEditActivity : AppCompatActivity(), DatePickerDialog.OnDateSetList
         return date
     }
 
-
-    override fun onDateSet(view: DatePicker, year: Int, monthOfYear: Int, dayOfMonth: Int) {
-
-        var str = String.format(Locale.US, "%d/%d/%d", year, monthOfYear+1, dayOfMonth)
-        dateEdit.text = str
+    override fun onSelected(year: Int, month: Int, date: Int) {
+        val c=Calendar.getInstance()
+        c.set(year,month,date)
+        dateEdit.setText(android.text.format.DateFormat.format("yyyy/MM/dd",c))
     }
 
-
-    fun showDatePickerDialog(v: View) {
-        val newFragment = DatePick()
-        newFragment.show(supportFragmentManager, "datePicker")
-
+    override fun onSelected(hourOfDay: Int, minute: Int) {
+        timeEdit.setText("%1$02d:%2$02d".format(hourOfDay,minute))
     }
-
 }
