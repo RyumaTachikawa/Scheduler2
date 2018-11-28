@@ -1,0 +1,5 @@
+<root>
+    <item name='android.support.v4.content.ContextCompat T getSystemService(android.content.Context, java.lang.Class&lt;T&gt;)'>
+        <annotation name='java.lang.Deprecated'/>
+    </item>
+</root>
